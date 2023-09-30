@@ -1,0 +1,33 @@
+/* Я знаю, что можно модули и с помощью sass писать
+! надо почитать про это! */
+
+.card {
+    display: flex;
+    flex-direction: row;
+}
+
+.pic {
+    width: 400px;
+    height: 160px;
+
+}
+
+.text {
+
+}
+
+.head {
+
+}
+
+.description {
+
+}
+
+.release {
+
+}
+
+.genre {
+
+}
