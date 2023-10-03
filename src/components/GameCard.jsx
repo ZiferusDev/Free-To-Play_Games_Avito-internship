@@ -1,5 +1,5 @@
 import React from 'react'
-import styles from "../styles/GameCard.module.css";
+import styles from "../styles/gameCard.module.css";
 
 /*
     название
@@ -19,23 +19,30 @@ class Card {
     }
 }
 
-const exampleCard = {
-    name: "Какая-то игра",
-    releaseDate: "Недавно",
-    publisher: "Очень влиятельный",
-    genre: "Самый интересный",
-    pictureLink: "../../media/preview_GTA.jpg"
+const truncate = (str, n) => {
+    if(str.length > n) {
+        while(/\W|_/g.test(str[n-1])) {
+            n--
+        }
+        return str.slice(0,n) + "..."
+    } else {
+        return str
+    }
 }
 
 export default function GameCard(props) { 
     return (
-    <div className={styles.card}>
-        <img className={styles.pic} src={props.pictureLink} alt="game cover" />
-        <div className={styles.text}>
-            <p className={styles.head}>Название: {props.name}</p>
-            <p className={styles.description}>Описание: Это крутая игра</p>
-            <p className={styles.genre}>Жанр: {props.genre}</p>
-            <p className={styles.release}>Выпущена: {props.releaseDate}</p>
+        // Потом будет роутинг, сейчас надо якорь :)
+    <div onClick={() => {window.location.assign('#')}} className={styles.card}>
+        <div className={styles.gamePreview}>
+            <img className={styles.pic} src={props.pictureLink} alt="game cover" />
+        </div>
+        <div className={styles.info}>
+            <div className={styles.heading}>{ truncate(props.name, 16) }</div>
+            <div className={styles.description}>Publisher: {truncate(props.publisher, 18)}</div>
+            <div className={styles.description}>Released: {props.releaseDate}</div>
+            {/* Прикольно было бы добавить несколько жанров и попытаться их впихнуть */}
+            <div className={styles.genre}>{props.genre}</div> 
         </div>
     </div>
   )

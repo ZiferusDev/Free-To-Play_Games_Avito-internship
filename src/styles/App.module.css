@@ -1,3 +1,28 @@
+:root {
+  --maroon-25: rgba(144, 12, 63, 0.25);
+  --maroon-50: rgba(144, 12, 63, 0.5);
+  --maroon-75: rgba(144, 12, 63, 0.75);
+  --maroon: rgba(144, 12, 63, 1);
+  --orange-25: rgba(249, 76, 16, 0.25);
+  --orange-50: rgba(249, 76, 16, 0.5);
+  --orange-75: rgba(249, 76, 16, 0.75);
+  --orange: rgba(249, 76, 16, 1);
+  --red-25: rgba(199, 0, 57, 0.25);
+  --red-50: rgba(199, 0, 57, 0.5);
+  --red-75: rgba(199, 0, 57, 0.75);
+  --red: rgba(199, 0, 57, 1);
+  --yellow-25: rgba(248, 222, 34, 0.25);
+  --yellow-50: rgba(248, 222, 34, 0.5);
+  --yellow-75: rgba(248, 222, 34, 0.75);
+  --yellow: rgba(248, 222, 34, 1);
+}
+
+@font-face {
+  font-family: "Jua-Regular";
+  src: url("../media/Jua-Regular.ttf");
+}
+
 .App {
   text-align: center;
+  background-color: #232230;
 }
