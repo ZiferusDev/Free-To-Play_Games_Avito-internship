@@ -1,37 +1,71 @@
 import {React, useState } from 'react';
+import { DownOutlined, SortAscendingOutlined, CalendarOutlined, FireOutlined, TeamOutlined } from "@ant-design/icons";
+import { Pagination, ConfigProvider, Dropdown, Space, Button, Radio, Select, message } from 'antd';
+
 import GameCard from './GameCard';
+
 import styles from "../styles/gameList.module.css";
 
-import { Pagination, ConfigProvider, Radio, Select } from 'antd';
 
 import gta_pic from "../media/preview_GTA.jpg";
 import nfs_pic from "../media/preview_NFS.jpg";
 import dota_pic from "../media/preview_DOTA.jpg";
-import assasin_pic from "../media/preview_AssasinValhalla.png";
+import assassin_pic from "../media/preview_AssassinValhalla.png";
 
-const CATEGORIES = ["MOBA", "Action", "Racing", "Aa", "Bb", "Cc", "Dd", "Zz", "Xx"];
+const CATEGORIES = ["mmorpg", "shooter", "strategy", "moba", "racing", "sports", "social", "sandbox", "open-world", "survival", "pvp", "pve", 
+"pixel", "voxel", "zombie", "turn-based", "first-person", "third-Person", "top-down", "tank", "space", "sailing", "side-scroller", "superhero", 
+"permadeath", "card", "battle-royale", "mmo", "mmofps", "mmotps", "3d", "2d", "anime", "fantasy", "sci-fi", "fighting", "action-rpg", "action", 
+"military", "martial-arts", "flight", "low-spec", "tower-defense", "horror", "mmorts"
+];
+
+function changePage(page, pageSize) { 
+  console.log(page);
+} 
+
+// Сортировка по 
+
+const handleMenuClick = (e) => {
+  message.info('Click on menu item.');
+  console.log('Sorting method ', e.key); // ! ключ из e нужен для сортировки
+};
+
+const sortingOptions = {
+  items: [ // ключи отсюда будут прокидываться в запрос
+    {
+      label: 'Alphabet',
+      key: 'alphabetical',
+      icon: <SortAscendingOutlined />,
+    },
+    {
+      label: 'Relevance',
+      key: 'relevance',
+      icon: <FireOutlined />,
+    },
+    {
+      label: 'Popularity',
+      key: 'popularity',
+      icon: <TeamOutlined />,
+    },
+    {
+      label: 'Release Date',
+      key: 'release-date',
+      icon: <CalendarOutlined />,
+    }
+  ],
+  onClick: handleMenuClick,
+};
+
+// сортировка по ^
+
+
 
 
 export default function GameList() {
-    // // Фильтр по платформе
-    // const [value1, setValue1] = useState('All');
-    // const [value2, setValue2] = useState('All');
-    // const [value3, setValue3] = useState('All');
-
-    // const onChange1 = ({ target: { value } }) => {
-    //     setValue1(value);
-    //   };
-    // const onChange2 = ({ target: { value } }) => {
-    //     setValue2(value);
-    // };
-    // const onChange3 = ({ target: { value } }) => {
-    //     setValue3(value);
-    // };
-
     // categories вынимается GET запросом к Free-To-Play-Games API
     const [selectedItems, setSelectedItems] = useState([]);
     const filteredOptions = CATEGORIES.filter((o) => !selectedItems.includes(o));
-
+    
+    // ! console.log(selectedItems); // теги для фильтрации. Вид: ["tag1", "tag2", ...]
 
       // тут логика, запросы, все дела
     // итогом запроса будет массив объектов
@@ -63,7 +97,7 @@ export default function GameList() {
           releaseDate: "10-11-2020",
           publisher: "Ubisoft",
           genre: "ACtion",
-          pictureLink: assasin_pic
+          pictureLink: assassin_pic
       },
       {
           name: "GTA V",
@@ -91,7 +125,7 @@ export default function GameList() {
           releaseDate: "10-11-2020",
           publisher: "Ubisoft",
           genre: "Action",
-          pictureLink: assasin_pic
+          pictureLink: assassin_pic
       }
   ];
 
@@ -107,32 +141,19 @@ export default function GameList() {
               theme={{
                 token: {
                     colorBorder: "transparent",
+                    colorPrimaryHover: "rgb(248,222,34)",
+                    colorPrimaryActive: "rgb(248,222,34)",
+                    colorPrimaryBorderHover: "transparent",
+                    
                     fontFamily: "Jua-Regular",
-                    colorBgContainer: '#f6ffed',
+                    colorBgContainer: '#643225',
+                    colorText: "#ffffff",
+  
+                    colorBgElevated: "#643225",
+                    controlItemBgHover: "rgba(248,222,34,0.5)",
 
                 },
                 components: {
-                  Select: {
-                  // Не нашёл, как исправить:
-                  // Кнопка удаления всего при наведении чёрная
-                  // В оповещении "empty description" текст должен быть белым, но он, почему-то, остаётся чёрным + alpha 0.25
-                  selectorBg: "#643225",
-                  multipleItemBg: 'rgba(248,222,34,0.75)',
-                  clearBg: "#643225",
-                  colorText: "#ffffff",
-                  colorTextDescription: "#ffffff",
-                  colorTextPlaceholder: "#ffffff",
-                  colorTextTertiary: "rgb(248,222,34)",
-                  colorTextQuaternary: "#ffffff", // Стрелка, ClearButton
-                  colorTextDisabled: "#ffffff",
-
-                  colorPrimaryHover: "transparent",
-                  controlOutline: "rgba(248,222,34,0.5)",
-                  colorBgElevated: "#643225",
-
-                  controlItemBgHover: "rgba(248,222,34,0.5)",
-
-                  },
                   Radio: {
                     buttonBg: "#643225",
                     buttonColor: "#ffffff",
@@ -143,10 +164,35 @@ export default function GameList() {
                     colorPrimary: "fff",
                     colorPrimaryHover: "transparent",
                     colorPrimaryActive: "transparent",
-                  }
+                  },
+                  
+                  Select: {
+                    // Не нашёл, как исправить:
+                    // В оповещении "empty description" текст должен быть белым, но он, почему-то, остаётся чёрным + alpha 0.25
+                    selectorBg: "#643225",
+                    multipleItemBg: 'rgba(248,222,34,0.75)',
+                    clearBg: "#643225",
+                    colorTextDescription: "#ffffff",
+                    colorTextPlaceholder: "#ffffff",
+                    colorTextTertiary: "rgb(248,222,34)",
+                    colorTextQuaternary: "#ffffff", // Стрелка, ClearButton
+                    colorTextDisabled: "#ffffff",
+
+                    colorPrimaryHover: "transparent",
+                    controlOutline: "rgba(248,222,34,0.5)",
+                  },
                 }
               }}
             >
+            <Dropdown menu={sortingOptions}>
+              <Button>
+                <Space>
+                  Sort by
+                  <DownOutlined />
+                </Space>
+              </Button>
+            </Dropdown>
+
               <Radio.Group 
                 defaultValue="all" 
                 buttonStyle="solid"
@@ -156,6 +202,7 @@ export default function GameList() {
                 <Radio.Button value="pc">PC</Radio.Button>
                 <Radio.Button value="browser">Browser</Radio.Button>
               </Radio.Group>
+              
               <Select
                 mode="multiple"
                 placeholder="Filter by genre"
@@ -169,7 +216,7 @@ export default function GameList() {
                 }))}
                 
                 style={{
-                  width: "70%",
+                  width: "60%",
                 }}
               />
             </ConfigProvider>
@@ -227,6 +274,7 @@ export default function GameList() {
                 total={500} // Динамически сюда надо будет прокидывать общее количество игр
                 pageSize={8} // По сколько элементов на странице скипается
                 showSizeChanger={false} // В пизду его, хрен перекрсишь и бессмысленный
+                onChange={changePage}
               />
 
             </ConfigProvider>
