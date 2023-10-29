@@ -17,15 +17,15 @@
 }
 
 .logotype {
-    height: 50px;
+    height: 40px;
+    width: 40px;
     position: relative;
-    width: 50px;
 }
 
 .siteName {
     color: #ffffff;
     font-family: "Jua-Regular", Helvetica;
-    font-size: 52px;
+    font-size: 32px;
     font-weight: 400;
     letter-spacing: 0;
     line-height: normal;
@@ -75,7 +75,7 @@
 .signInBtn {
     color: white;
     font-family: "Jua-Regular", Helvetica;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
 
     align-items: center;
@@ -98,7 +98,7 @@
 .signUpBtn {
     color: white;
     font-family: "Jua-Regular", Helvetica;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 400;
 
     align-items: center;

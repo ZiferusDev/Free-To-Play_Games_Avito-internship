@@ -1,52 +1,77 @@
 
-import sendRequest from "./sendRequest"
+const defaultReq = "https://free-to-play-games-database.p.rapidapi.com/api/";
 
-const defaultReq = "https://www.freetogame.com/api/";
+async function sendRequest(url) {
 
-export function getGames(params = null) {
+    const options = {
+        method: 'GET',
+        headers: {
+            'X-RapidAPI-Key': '6b4618021fmsh2074fdc1d2ef2dep1b5d56jsn03ff73080691',
+            'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
+        }
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const result = await response.json();
+        console.log("Успешный запрос");
+
+        return result
+    } catch (error) {
+        console.log("Неуспешный запрос");
+        console.error(error);
+        return error;
+    }
+}
+
+/*
+    * params interface:
+        platform: string // "pc" or "browser" or "all", 
+        category: string // "mmorpg" or "shooter" or "pvp" or "mmofps"... // ? in url: caterogy="..."
+        tags:     array  // ["mmorpg", "shooter", "pvp", "mmofps"...]
+        sortBy:   string // "release-date" or "popularity" or "alphabetical" or "relevance" // ? in url: sort-by="..."
+*/
+
+export async function getGames(params = null) {
 
     if(!params) {
-        return sendRequest(defaultReq + "games"); // if we just want the whore game list
+        return await sendRequest(defaultReq + "games"); // без параметров будет отправлен запрос для получения всех игр
     }
-
-    /* paraps may have: 
-        platform: "pc" or "browser" or "all", 
-        category: "mmorpg" or "shooter" or "pvp" or "mmofps"... // ? in url: caterogy="..."
-        tag: ["mmorpg", "shooter", "pvp", "mmofps"...]
-        sortBy: "release-date" or "popularity" or "alphabetical" or "relevance" // ? in url: sort-by="..."
-
-    */
 
     let myReq = defaultReq;
 
-    if(params.tags) { // if we need to filter games by tags, we'll need other default path
-        myReq += `/filter?tag=` + params.tag.join(".");
-
-        return sendRequest(tagsReq)
+    if(params.tags) { // при фильтрации с помощью тегов, путь запроса меняется
+        myReq += `filter?tag=` + params.tags.join(".");
     } else {
-        myReq += "/games"
+        myReq += "games?";
+        if(params.category) {
+            myReq +=`category=${params.category}`
+        }
+    
     }
 
-    // now we add params
-    if()
+    if(params.platform) {
+        
+        if(myReq[myReq.length - 1] !== "?") { // проверяем, случай, когда этот параметр - первый
+            myReq += "&"
+        }  
 
+        myReq += `platform=${params.platform}`
+    }
 
+    if(params.sortBy) {
 
+        if(myReq[myReq.length - 1] !== "?") { 
+            myReq += "&"
+        }  
+
+        myReq += `sort-by=${params.sortBy}`
+    }
+
+    return sendRequest(myReq)
 }
 
-export function getSpecificGame(id = 0) {
-    return sendRequest(`${defaultReq}game?id=${id}`)
+export async function getSpecificGame(id = 0) {
+    return await sendRequest(`${defaultReq}game?id=${id}`)
 }
 
-
-// fetch( "https://www.freetogame.com/api/games", {mode: "no-cors"} )
-// .then(response => {
-//     if(response.ok) {
-//         return response.json()
-//     }
-
-//     return response
-// })
-// .then(games => {
-//     return games ? JSON.parse(games) : {}
-// }) 

@@ -19,7 +19,7 @@ class Card {
     }
 }
 
-const truncate = (str, n) => {
+const truncate = (str, n) => { // эта функция сокращает текст, если он слишком длинный
     if(str.length > n) {
         while(/\W|_/g.test(str[n-1])) {
             n--
