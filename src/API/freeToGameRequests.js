@@ -1,3 +1,4 @@
+import keyForRapidAPI from "./secret.js";
 
 const defaultReq = "https://free-to-play-games-database.p.rapidapi.com/api/";
 
@@ -6,7 +7,7 @@ async function sendRequest(url) { // ! axios меньше кода, больше
     const options = {
         method: 'GET',
         headers: {
-            'X-RapidAPI-Key': '6b4618021fmsh2074fdc1d2ef2dep1b5d56jsn03ff73080691',
+            'X-RapidAPI-Key': keyForRapidAPI,
             'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
         }
     };
