@@ -1,36 +1,28 @@
-import {React, useState, useEffect } from 'react';
+import {React, useState, useEffect, useContext } from 'react';
 import { DownOutlined, SortAscendingOutlined, CalendarOutlined, FireOutlined, TeamOutlined } from "@ant-design/icons";
 import { Pagination, ConfigProvider, Dropdown, Space, Button, Radio, Select, message } from 'antd';
-import { getGames } from '../actions/freeToGameRequests';
+import { getGames } from '../API/freeToGameRequests';
 
 
 // components / styles
-import Games from './Games';
+import GameCard from "./GameCard";
+import NoData from './UI/NoData';
+
 import styles from "../styles/gameList.module.css";
 
+
 export default function GameList() {
-  
-  const CATEGORIES =  [ 
-    "mmorpg", "shooter", "strategy", "moba", "racing", "sports", "social", "sandbox", "open-world", "survival", "pvp", "pve", 
-    "pixel", "voxel", "zombie", "turn-based", "first-person", "third-Person", "top-down", "tank", "space", "sailing", "side-scroller", "superhero", 
-    "permadeath", "card", "battle-royale", "mmo", "mmofps", "mmotps", "3d", "2d", "anime", "fantasy", "sci-fi", "fighting", "action-rpg", "action", 
-    "military", "martial-arts", "flight", "low-spec", "tower-defense", "horror", "mmorts"
-  ];
 
-  // ! console.log(tags); // теги для фильтрации. Вид: ["tag1", "tag2", ...]
-  const [gamesToRender, setGamesToRender] = useState([]),
-        [page, setPage] = useState(1),
-        [sortingMethod, setSortingMethod] = useState(""),
-        [tags, setTags] = useState([]),
-        [platform, setPlatform] = useState("all");
-
-  const filteredOptions = CATEGORIES.filter((o) => !tags.includes(o)); // убираем выбранные категории из списка предложенных 
+  const [gamesToRender, setGamesToRender] = useState([]);
+  const [page, setPage] = useState(1);
+  const [sortingMethod, setSortingMethod] = useState("");
+  const [tags, setTags] = useState([]);
+  const [platform, setPlatform] = useState("all");
 
   //handlers // * вынес их сюда для наглядности и упрощения чтения кода
-  
+
   const handleClick = {
     sort: function (event) {
-            // message.info('Changed sorting method');
             setSortingMethod(event.key);
             console.log("Выбран метод сортировки:", event.key);
           },
@@ -39,7 +31,7 @@ export default function GameList() {
                 console.log("Выбрана платформа:", event.target.value)
               },
     page: function (page, pageSize) { 
-            setPage(page)
+            setPage(page);
             console.log("Выбрана страница", page);
           },
     tags: function (newTags) { // newTags: array
@@ -48,20 +40,28 @@ export default function GameList() {
           },
   }
 
-
-
   useEffect( () => {
+    message.info("UseEffect сработал, запрос улетел")
     // console.log("My Sorting method", sortingMethod);
-    getGames()
+    getGames({tags, sortingMethod, platform})
         .then(data => {
             setGamesToRender(data);
         })
     }, [tags, sortingMethod, platform]) // МАССИВ ЗАВИСИМОСТЕЙ: Порядок, теги, платформа
 
-  // console.log(gamesToRender);
-  
+    // gamesToRender.length ? gamesToRender.slice( (page - 1)*8, page*8) : 0;
 
-  // Сортировка по 
+
+  // * stuff for UI 
+
+  const CATEGORIES =  [ 
+    "mmorpg", "shooter", "strategy", "moba", "racing", "sports", "social", "sandbox", "open-world", "survival", "pvp", "pve", 
+    "pixel", "voxel", "zombie", "turn-based", "first-person", "third-Person", "top-down", "tank", "space", "sailing", "side-scroller", "superhero", 
+    "permadeath", "card", "battle-royale", "mmo", "mmofps", "mmotps", "3d", "2d", "anime", "fantasy", "sci-fi", "fighting", "action-rpg", "action", 
+    "military", "martial-arts", "flight", "low-spec", "tower-defense", "horror", "mmorts"
+  ];
+  const filteredOptions = CATEGORIES.filter((o) => !tags.includes(o)); // убираем выбранные категории из списка предложенных 
+
   const sortingOptions = {
     items: [ // ключи отсюда будут прокидываться в запрос
       {
@@ -88,6 +88,9 @@ export default function GameList() {
     onClick: handleClick.sort,
   };
   
+  console.log(gamesToRender.length);
+  console.log(gamesToRender);
+
   return (
 
     <div className={styles.gameList}>
@@ -143,14 +146,14 @@ export default function GameList() {
                 }
               }}
             >
-            <Dropdown menu={sortingOptions}>
-              <Button>
-                <Space>
-                  Sort by
-                  <DownOutlined />
-                </Space>
-              </Button>
-            </Dropdown>
+              <Dropdown menu={sortingOptions}>
+                <Button>
+                  <Space>
+                    Sort by
+                    <DownOutlined />
+                  </Space>
+                </Button>
+              </Dropdown>
 
               <Radio.Group 
                 defaultValue="all" 
@@ -181,10 +184,25 @@ export default function GameList() {
             </ConfigProvider>
           </div>
         </div>
-
-          <Games 
-
-          />
+        
+        <div className={styles.games}>
+            { 
+              gamesToRender.length
+              ?
+            // здесь должна быть логика аля !games ? "Ничего не найдено" : список игр 
+                gamesToRender.slice( (page - 1)*8, page*8).map(game =>
+                    <GameCard
+                        name = {game.title}
+                        releaseDate = {game.release_date}
+                        publisher = {game.publisher}
+                        genre = {game.genre}
+                        pictureLink = {game.thumbnail}
+                        key = {game.id}
+                    />
+                )
+              : <NoData />
+            }
+        </div>
 
 
 
@@ -222,7 +240,7 @@ export default function GameList() {
               <Pagination 
                 itemBg = {"#F94C10"}
                 defaultCurrent={1} 
-                total={500} // Динамически сюда надо будет прокидывать общее количество игр
+                total={gamesToRender.length} // Динамически сюда надо будет прокидывать общее количество игр
                 pageSize={8} // По сколько элементов на странице скипается
                 showSizeChanger={false} // В пизду его, хрен перекрсишь и бессмысленный
                 onChange={handleClick.page}

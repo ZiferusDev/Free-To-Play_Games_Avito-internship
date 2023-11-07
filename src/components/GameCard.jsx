@@ -9,7 +9,7 @@ import styles from "../styles/gameCard.module.css";
     картинка
 */
 
-class Card {
+class Card { // ! убрать. Должны генерировать разные объекты
     constructor(name, releaseDate, publisher, genre, pictureLink) { // всё это должно лежать на сервере
         this.name = name;
         this.releaseDate = releaseDate;
@@ -19,7 +19,7 @@ class Card {
     }
 }
 
-const truncate = (str, n) => { // эта функция сокращает текст, если он слишком длинный
+const shortenText = (str, n) => { // эта функция сокращает текст, если он слишком длинный
     if(str.length > n) {
         while(/\W|_/g.test(str[n-1])) {
             n--
@@ -35,11 +35,11 @@ export default function GameCard(props) {
         // Потом будет роутинг, сейчас надо якорь :)
     <div onClick={() => {window.location.assign('#')}} className={styles.card}>
         <div className={styles.gamePreview}>
-            <img className={styles.pic} src={props.pictureLink} alt="game cover" />
+            <img className={styles.pic} src={props.pictureLink ? props.pictureLink : ""} alt="no picture" />
         </div>
         <div className={styles.info}>
-            <div className={styles.heading}>{ truncate(props.name, 16) }</div>
-            <div className={styles.description}>Publisher: {truncate(props.publisher, 18)}</div>
+            <div className={styles.heading}>{ shortenText(props.name, 16) }</div>
+            <div className={styles.description}>Publisher: {shortenText(props.publisher, 18)}</div>
             <div className={styles.description}>Released: {props.releaseDate}</div>
             {/* Прикольно было бы добавить несколько жанров и попытаться их впихнуть */}
             <div className={styles.genre}>{props.genre}</div> 

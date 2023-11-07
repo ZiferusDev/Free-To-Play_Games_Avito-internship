@@ -14,15 +14,14 @@
   --yellow-25: rgba(248, 222, 34, 0.25);
   --yellow-50: rgba(248, 222, 34, 0.5);
   --yellow-75: rgba(248, 222, 34, 0.75);
-  --yellow: rgba(248, 222, 34, 1);
+  --yellow: rgba(248, 222, 34, 1); 
 }
 
 @font-face {
   font-family: "Jua-Regular";
-  src: url("../media/Jua-Regular.ttf");
+  src: url("../static/Jua-Regular.ttf");
 }
 
 .App {
-  text-align: center;
-  background-color: #232230;
+  font-family: "Jua-Regular";
 }

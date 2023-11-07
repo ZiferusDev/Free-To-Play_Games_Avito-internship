@@ -1,7 +1,7 @@
 
 const defaultReq = "https://free-to-play-games-database.p.rapidapi.com/api/";
 
-async function sendRequest(url) {
+async function sendRequest(url) { // ! axios меньше кода, больше понятности
 
     const options = {
         method: 'GET',
@@ -32,15 +32,11 @@ async function sendRequest(url) {
         sortBy:   string // "release-date" or "popularity" or "alphabetical" or "relevance" // ? in url: sort-by="..."
 */
 
-export async function getGames(params = null) {
-
-    if(!params) {
-        return await sendRequest(defaultReq + "games"); // без параметров будет отправлен запрос для получения всех игр
-    }
+export function getGames(params = null) {
 
     let myReq = defaultReq;
 
-    if(params.tags) { // при фильтрации с помощью тегов, путь запроса меняется
+    if(params.tags.length) { // при фильтрации с помощью тегов, путь запроса меняется
         myReq += `filter?tag=` + params.tags.join(".");
     } else {
         myReq += "games?";
@@ -59,14 +55,16 @@ export async function getGames(params = null) {
         myReq += `platform=${params.platform}`
     }
 
-    if(params.sortBy) {
+    if(params.sortingMethod) {
 
         if(myReq[myReq.length - 1] !== "?") { 
             myReq += "&"
         }  
 
-        myReq += `sort-by=${params.sortBy}`
+        myReq += `sort-by=${params.sortingMethod}`
     }
+
+    console.log(myReq);
 
     return sendRequest(myReq)
 }

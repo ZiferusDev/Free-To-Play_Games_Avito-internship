@@ -1,0 +1,25 @@
+.logo {
+    align-items: center;
+    display: inline-flex;
+    flex: 0 0 auto;
+    gap: 15px;
+    position: relative;
+}
+
+.logotype {
+    height: 40px;
+    width: 40px;
+    position: relative;
+}
+
+.siteName {
+    color: #ffffff;
+    font-family: "Jua-Regular", Helvetica;
+    font-size: 32px;
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: normal;
+    margin-top: -1px;
+    position: relative;
+    width: fit-content;
+}
